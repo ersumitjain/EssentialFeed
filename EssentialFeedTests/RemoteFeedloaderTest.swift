@@ -53,28 +53,45 @@ class RemoteFeedloaderTest: XCTestCase {
          let url = URL(string: "https://a-given-url.com")!
         let (sut, client) = makeSut(url: url)
         
-        var captureError = [RemoteFeedLoader.Error]()
+        var captureErrors = [RemoteFeedLoader.Error]()
         
-        sut.load { captureError.append($0) }
+        sut.load { captureErrors.append($0) }
         
-        let clientError = NSError(domain: "Test", code: 0)
-        client.complete(with: clientError)
+        let clientErrors = NSError(domain: "Test", code: 0)
+        client.complete(with: clientErrors)
         
-        XCTAssertEqual(captureError, [.connectivity])
+        XCTAssertEqual(captureErrors, [.connectivity])
+    }
+    
+    func test_load_deliversErrorOn400HTTPResponse() {
+         let url = URL(string: "https://a-given-url.com")!
+        let (sut, client) = makeSut(url: url)
+        
+        var captureErrors = [RemoteFeedLoader.Error]()
+        
+        sut.load { captureErrors.append($0) }
+        
+        
+        client.complete(withStatuscode: 400)
+        
+        XCTAssertEqual(captureErrors, [.invalidData])
     }
     
     func test_load_deliversErrorOnNon200HTTPResponse() {
          let url = URL(string: "https://a-given-url.com")!
         let (sut, client) = makeSut(url: url)
         
-        var captureError = [RemoteFeedLoader.Error]()
+        var captureErrors = [RemoteFeedLoader.Error]()
         
-        sut.load { captureError.append($0) }
+        sut.load { captureErrors.append($0) }
         
-        
-        client.complete(withStatuscode: 400)
-        
-        XCTAssertEqual(captureError, [.invalidData])
+        [199, 201, 300, 400, 500].forEach { code in
+         client.complete(withStatuscode: code)
+            
+            XCTAssertEqual(captureErrors, [.invalidData])
+            
+            captureErrors = []
+        }        
     }
     
     // Mark: - Helper
