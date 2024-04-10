@@ -81,17 +81,16 @@ class RemoteFeedloaderTest: XCTestCase {
          let url = URL(string: "https://a-given-url.com")!
         let (sut, client) = makeSut(url: url)
         
+        [199, 201, 300, 400, 500].enumerated().forEach { index, code in
         var captureErrors = [RemoteFeedLoader.Error]()
         
         sut.load { captureErrors.append($0) }
         
-        [199, 201, 300, 400, 500].forEach { code in
-         client.complete(withStatuscode: code)
+            client.complete(withStatuscode: code, at: index)
             
             XCTAssertEqual(captureErrors, [.invalidData])
             
-            captureErrors = []
-        }        
+        }
     }
     
     // Mark: - Helper
