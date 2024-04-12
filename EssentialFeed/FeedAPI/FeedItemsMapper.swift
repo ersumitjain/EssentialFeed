@@ -11,6 +11,10 @@ import Foundation
 final class FeedItemsMapper {
     private struct Root: Decodable {
         let items: [Item]
+        
+        var feed: [FeedItem] {
+            items.map { $0.item }
+        }
     }
     
     private struct Item: Decodable {
@@ -35,6 +39,6 @@ final class FeedItemsMapper {
         let root = try? JSONDecoder().decode(Root.self, from: data) else {
             return .failure(.invalidData)
         }
-        return .success( root.items.map { $0.item })
+        return .success(root.feed)
     }
 }
