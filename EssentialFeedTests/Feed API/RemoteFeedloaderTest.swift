@@ -53,7 +53,7 @@ class RemoteFeedloaderTest: XCTestCase {
         let url = URL(string: "https://a-given-url.com")!
         let (sut, client) = makeSut(url: url)
         
-        expect(sut, toCompleteWith: .failure(RemoteFeedLoader.Error.connectivity), when: {
+        expect(sut, toCompleteWith: failure(.connectivity), when: {
                   let clientErrors = NSError(domain: "Test", code: 0)
               client.complete(with: clientErrors)
         })
@@ -63,7 +63,7 @@ class RemoteFeedloaderTest: XCTestCase {
         let url = URL(string: "https://a-given-url.com")!
         let (sut, client) = makeSut(url: url)
         
-        expect(sut, toCompleteWith: .failure(RemoteFeedLoader.Error.invalidData), when:  {
+        expect(sut, toCompleteWith: failure(.invalidData), when:  {
              client.complete(withStatuscode: 400)
         })
     }
@@ -74,7 +74,7 @@ class RemoteFeedloaderTest: XCTestCase {
         
         [199, 201, 300, 400, 500].enumerated().forEach { index, code in
             
-            expect(sut, toCompleteWith: .failure(RemoteFeedLoader.Error.invalidData), when: {
+            expect(sut, toCompleteWith: failure(.invalidData), when: {
                 client.complete(withStatuscode: code, at: index)
             })
         }
@@ -84,7 +84,7 @@ class RemoteFeedloaderTest: XCTestCase {
         let url = URL(string: "https://a-given-url.com")!
         let (sut, client) = makeSut(url: url)
         
-        expect(sut, toCompleteWith: .failure(RemoteFeedLoader.Error.invalidData), when: {
+        expect(sut, toCompleteWith: failure(.invalidData), when: {
             let invalidJson = Data("Invalid json".utf8)
             client.complete(withStatuscode: 200, data: invalidJson)
         })
@@ -180,6 +180,10 @@ class RemoteFeedloaderTest: XCTestCase {
     private func makeItemJSON(_ items: [[String: Any]]) -> Data {
         let json = ["items": items]
         return try! JSONSerialization.data(withJSONObject: json)
+    }
+    
+    private func failure(_ error: RemoteFeedLoader.Error) -> RemoteFeedLoader.Result {
+        return .failure(error)
     }
     
     private func expect(_ sut: RemoteFeedLoader, toCompleteWith expectedResult: RemoteFeedLoader.Result, when action: () -> Void) {
