@@ -20,6 +20,7 @@
 		9512728A2BC9ABCB00E5663E /* FeedItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951272892BC9ABCB00E5663E /* FeedItemsMapper.swift */; };
 		9512728D2BCB037D00E5663E /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9512728C2BCB037D00E5663E /* URLSessionHTTPClientTests.swift */; };
 		951272902BCC266000E5663E /* XCTestcase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9512728F2BCC266000E5663E /* XCTestcase+MemoryLeakTracking.swift */; };
+		951272922BCC626C00E5663E /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951272912BCC626C00E5663E /* URLSessionHTTPClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		951272892BC9ABCB00E5663E /* FeedItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemsMapper.swift; sourceTree = "<group>"; };
 		9512728C2BCB037D00E5663E /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 		9512728F2BCC266000E5663E /* XCTestcase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestcase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
+		951272912BCC626C00E5663E /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				951272852BC5A9FE00E5663E /* RemoteFeedLoader.swift */,
+				951272912BCC626C00E5663E /* URLSessionHTTPClient.swift */,
 				951272872BC9AB2500E5663E /* HTTPClient.swift */,
 				951272892BC9ABCB00E5663E /* FeedItemsMapper.swift */,
 			);
@@ -263,6 +266,7 @@
 				9512725F2BC58E9400E5663E /* ContentView.swift in Sources */,
 				9512725D2BC58E9400E5663E /* AppDelegate.swift in Sources */,
 				951272882BC9AB2500E5663E /* HTTPClient.swift in Sources */,
+				951272922BCC626C00E5663E /* URLSessionHTTPClient.swift in Sources */,
 				9512728A2BC9ABCB00E5663E /* FeedItemsMapper.swift in Sources */,
 				951272812BC595DD00E5663E /* FeedLoader.swift in Sources */,
 				951272862BC5A9FE00E5663E /* RemoteFeedLoader.swift in Sources */,
