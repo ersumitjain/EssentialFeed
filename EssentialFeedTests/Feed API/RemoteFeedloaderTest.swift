@@ -54,8 +54,8 @@ class RemoteFeedloaderTest: XCTestCase {
         let (sut, client) = makeSut(url: url)
         
         expect(sut, toCompleteWith: failure(.connectivity), when: {
-                  let clientErrors = NSError(domain: "Test", code: 0)
-              client.complete(with: clientErrors)
+            let clientErrors = NSError(domain: "Test", code: 0)
+            client.complete(with: clientErrors)
         })
     }
     
@@ -64,7 +64,7 @@ class RemoteFeedloaderTest: XCTestCase {
         let (sut, client) = makeSut(url: url)
         
         expect(sut, toCompleteWith: failure(.invalidData), when:  {
-             client.complete(withStatuscode: 400)
+            client.complete(withStatuscode: 400)
         })
     }
     
@@ -93,11 +93,11 @@ class RemoteFeedloaderTest: XCTestCase {
     func test_load_deliversNoItemsOn200HTTPResponseWithEmptyJsonList() {
         let url = URL(string: "https://a-given-url.com")!
         let (sut, client) = makeSut(url: url)
-      //  var capturedResult = [RemoteFeedLoader.Result]()
-     //   sut.load { capturedResult.append($0) }
+        //  var capturedResult = [RemoteFeedLoader.Result]()
+        //   sut.load { capturedResult.append($0) }
         expect(sut, toCompleteWith: .success([])) {
-             let emptyListJson = Data(bytes: "{\"items\": []}".utf8)
-                   client.complete(withStatuscode: 200, data: emptyListJson)
+            let emptyListJson = Data(bytes: "{\"items\": []}".utf8)
+            client.complete(withStatuscode: 200, data: emptyListJson)
         }
     }
     
@@ -125,7 +125,7 @@ class RemoteFeedloaderTest: XCTestCase {
     
     func test_load_doesNotDeliverResultAfterSUTInstancehasBeenDeallocated() {
         
-         let url = URL(string: "https://a-given-url.com")!
+        let url = URL(string: "https://a-given-url.com")!
         let client = HTTPClientSpy()
         
         var sut: RemoteFeedLoader? = RemoteFeedLoader(client: client, url: url)
@@ -154,12 +154,6 @@ class RemoteFeedloaderTest: XCTestCase {
         return (sut, client)
     }
     
-    private func trackForMemoryLeaks(_ instance: AnyObject) {
-       addTeardownBlock { [weak instance] in
-           XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.")
-       }
-       }
-    
     private func makeItem(
         id: UUID,
         description: String? = nil,
@@ -187,7 +181,7 @@ class RemoteFeedloaderTest: XCTestCase {
     }
     
     private func expect(_ sut: RemoteFeedLoader, toCompleteWith expectedResult: RemoteFeedLoader.Result, when action: () -> Void) {
-       
+        
         let exp = expectation(description: "Wait for load completion")
         
         sut.load { receivedResult in
@@ -195,7 +189,7 @@ class RemoteFeedloaderTest: XCTestCase {
             case let (.success(receivedItems), .success(expectedItems)):
                 XCTAssertEqual(receivedItems, expectedItems)
             case let (.failure(receivedError as RemoteFeedLoader.Error), .failure(expectedError  as RemoteFeedLoader.Error)):
-                 XCTAssertEqual(receivedError, expectedError)
+                XCTAssertEqual(receivedError, expectedError)
             default:
                 XCTFail("Expected result \(expectedResult) got \(receivedResult) instead")
             }
