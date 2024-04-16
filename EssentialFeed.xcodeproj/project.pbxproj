@@ -21,6 +21,7 @@
 		9512728D2BCB037D00E5663E /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9512728C2BCB037D00E5663E /* URLSessionHTTPClientTests.swift */; };
 		951272902BCC266000E5663E /* XCTestcase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9512728F2BCC266000E5663E /* XCTestcase+MemoryLeakTracking.swift */; };
 		951272922BCC626C00E5663E /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951272912BCC626C00E5663E /* URLSessionHTTPClient.swift */; };
+		951272B02BCEAEDC00E5663E /* EssentialFeedAPIEndToEndTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951272AF2BCEAEDC00E5663E /* EssentialFeedAPIEndToEndTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		9512728C2BCB037D00E5663E /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 		9512728F2BCC266000E5663E /* XCTestcase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestcase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
 		951272912BCC626C00E5663E /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
+		951272AF2BCEAEDC00E5663E /* EssentialFeedAPIEndToEndTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EssentialFeedAPIEndToEndTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +152,7 @@
 				9512728E2BCC262D00E5663E /* Helpers */,
 				951272822BC5992600E5663E /* RemoteFeedloaderTest.swift */,
 				9512728C2BCB037D00E5663E /* URLSessionHTTPClientTests.swift */,
+				951272AF2BCEAEDC00E5663E /* EssentialFeedAPIEndToEndTests.swift */,
 			);
 			path = "Feed API";
 			sourceTree = "<group>";
@@ -278,6 +281,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				951272B02BCEAEDC00E5663E /* EssentialFeedAPIEndToEndTests.swift in Sources */,
 				951272832BC5992600E5663E /* RemoteFeedloaderTest.swift in Sources */,
 				9512728D2BCB037D00E5663E /* URLSessionHTTPClientTests.swift in Sources */,
 				951272902BCC266000E5663E /* XCTestcase+MemoryLeakTracking.swift in Sources */,
