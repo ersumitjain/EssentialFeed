@@ -10,8 +10,27 @@ import XCTest
 import EssentialFeed
 
 class EssentialFeedAPIEndToEndTests: XCTestCase {
-
+    
     func test_endToEndTestServerGETFeedResult_matchesFixedTestsAccountData() {
+        
+        let receivedResult = getFeedResult()
+        switch receivedResult {
+        case let .success(items):
+            XCTAssertEqual(items.count, 8, "Expected 8 items in the test account feed")
+            
+            items.enumerated().forEach { (index, item) in
+                XCTAssertEqual(item, expectedItem(at: index), "Unexpected item values at index \(index)")
+            }
+        case let .failure(error):
+            XCTFail("Expected succesful feed result, got \(error) instead")
+        default:
+            XCTFail("Expected succesful feed result, got no result instead")
+        }
+    }
+    
+    //Mark: - Helper
+    
+    private func getFeedResult() -> LoadFeedResult? {
         let testServerURL = URL(string: "https://essentialdeveloper.com/feed-case-study/test-api/feed")!
         let client = URLSessionHTTPClient()
         
@@ -28,22 +47,8 @@ class EssentialFeedAPIEndToEndTests: XCTestCase {
         
         wait(for: [exp], timeout: 5.0)
         
-        
-        switch receivedResult {
-        case let .success(items):
-            XCTAssertEqual(items.count, 8, "Expected 8 items in the test account feed")
-            
-            items.enumerated().forEach { (index, item) in
-                XCTAssertEqual(item, expectedItem(at: index), "Unexpected item values at index \(index)")
-            }
-        case let .failure(error):
-             XCTFail("Expected succesful feed result, got \(error) instead")
-        default:
-             XCTFail("Expected succesful feed result, got no result instead")
-        }
+        return receivedResult
     }
-    
-    //Mark: - Helper
     
     private func expectedItem(at index: Int) -> FeedItem {
         return FeedItem(
@@ -77,7 +82,7 @@ class EssentialFeedAPIEndToEndTests: XCTestCase {
             "Description 6",
             "Description 7",
             "Description 8",
-        ][index])
+            ][index])
     }
     
     private func location(at index: Int) -> String? {
@@ -90,7 +95,7 @@ class EssentialFeedAPIEndToEndTests: XCTestCase {
             "Location 6",
             "Location 7",
             "Location 8",
-        ][index])
+            ][index])
     }
     
     private func imageUrl(at index: Int) -> URL {
@@ -103,6 +108,6 @@ class EssentialFeedAPIEndToEndTests: XCTestCase {
             "https://url-6.com",
             "https://url-7.com",
             "https://url-8.com",
-        ][index])!
+            ][index])!
     }
 }
