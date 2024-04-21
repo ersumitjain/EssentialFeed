@@ -11,6 +11,21 @@ import EssentialFeed
 
 class EssentialFeedAPIEndToEndTests: XCTestCase {
     
+//    func demo() {
+//        let cache = URLCache(memoryCapacity: 10*1024*1024, diskCapacity: 100*1024*1024, diskPath: nil)
+//
+//        let configuration = URLSessionConfiguration.default
+//        configuration.urlCache = cache
+//        configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+//
+//        let session = URLSession(configuration: configuration)
+//
+//        let url = URL(string: "http:// any-url.com")
+//        let request = URLRequest(url: url, cachePolicy: .returnCacheDataDontLoad, timeoutInterval: 30)
+//
+//        URLCache.shared = cache
+//    }
+    
     func test_endToEndTestServerGETFeedResult_matchesFixedTestsAccountData() {
         
         let receivedResult = getFeedResult()
@@ -32,7 +47,8 @@ class EssentialFeedAPIEndToEndTests: XCTestCase {
     
     private func getFeedResult() -> LoadFeedResult? {
         let testServerURL = URL(string: "https://essentialdeveloper.com/feed-case-study/test-api/feed")!
-        let client = URLSessionHTTPClient()
+//        let client = URLSessionHTTPClient()
+        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
         
         let sut = RemoteFeedLoader(client: client, url: testServerURL)
         
