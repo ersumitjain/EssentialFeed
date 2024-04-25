@@ -21,7 +21,7 @@ class LocalFeedLoader {
         store.deleteCacheFeed { [weak self] error in
             guard let self = self else { return }
             if let cacheDeletionError = error {
-                completion(error)
+                completion(cacheDeletionError)
             } else {
                 self.store.insert(items: items, timestamp: self.currentDate()) { [weak self] error in
                     guard self != nil else { return }
