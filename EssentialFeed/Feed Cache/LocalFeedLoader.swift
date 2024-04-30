@@ -15,12 +15,12 @@ public final class LocalFeedLoader {
     
     public typealias LoadResult = LoadFeedResult
     
-   public  init(store: FeedStore, currentDate: @escaping() -> Date) {
+    public  init(store: FeedStore, currentDate: @escaping() -> Date) {
         self.store = store
         self.currentDate = currentDate
     }
     
-  public func save(items: [FeedItem], completion: @escaping(Error?) -> Void) {
+    public func save(items: [FeedItem], completion: @escaping(Error?) -> Void) {
         store.deleteCacheFeed { [weak self] error in
             guard let self = self else { return }
             if let cacheDeletionError = error {
@@ -39,9 +39,13 @@ public final class LocalFeedLoader {
                 self.store.deleteCacheFeed { _ in }
             case let .found(feed, timestamp) where self.validate(timestamp):
                 completion(.success(feed.toModels()))
-            case .found, .emplty:
+            case .found:
+                completion(.success([]))
+                self.store.deleteCacheFeed { _ in }
+            case .emplty:
                 completion(.success([]))
             }
+            
         }
     }
     
