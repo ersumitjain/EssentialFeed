@@ -76,13 +76,13 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         }
     }
     
-    func test_load_deletesCacheOnRetrievalError() {
+    func test_load_hasNoSideEffectsOnRetrievalError() {
         let (store, sut) = makeSut()
         
         sut.load { _ in }
         store.completeRetrieval(with: anyError())
         
-        XCTAssertEqual(store.receivedMessage, [.retrieve, .deleteCacheFeed])
+        XCTAssertEqual(store.receivedMessage, [.retrieve])
     }
     
     func test_load_doesNotDeletesCacheOnEmptyCache() {
