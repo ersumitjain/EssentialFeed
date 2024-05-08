@@ -73,20 +73,24 @@ class CodableFeedStore {
         }
         
         do {
-        let decoder = JSONDecoder()
-        let cache = try decoder.decode(Cache.self, from: data)
-        completion(.found(feed: cache.localFeeds, timestamp: cache.timestamp))
+            let decoder = JSONDecoder()
+            let cache = try decoder.decode(Cache.self, from: data)
+            completion(.found(feed: cache.localFeeds, timestamp: cache.timestamp))
         } catch {
             completion(.failure(error))
         }
     }
     
     func insert(items: [LocalFeedItem], timestamp: Date, completion: @escaping FeedStore.InsertionCompletion) {
-        let encoder = JSONEncoder()
-        let cache = Cache(feeds: items.map(CodableFeedItem.init), timestamp: timestamp)
-        let encoded = try! encoder.encode(cache)
-        try! encoded.write(to: storeURL)
-        completion(nil)
+        do {
+            let encoder = JSONEncoder()
+            let cache = Cache(feeds: items.map(CodableFeedItem.init), timestamp: timestamp)
+            let encoded = try encoder.encode(cache)
+            try encoded.write(to: storeURL)
+            completion(nil)
+        } catch {
+            completion(error)
+        }
     }
 }
 
@@ -168,6 +172,18 @@ class CodableFeedStoreTests: XCTestCase {
         
     }
     
+    func test_insert_deliversErrorOnInsertionError() {
+        let invalidStoreURL = URL(string: "invalid://store-url")!
+        
+        let sut = makeSUT(storeURL: invalidStoreURL)
+        let feed = uniqueItems().local
+        let timestamp = Date()
+        
+        let insertError = insert((feed, timestamp), to: sut)
+        
+        XCTAssertNotNil(insertError, "Expected cache insertion to fail with an error")
+    }
+    
     
     // - Mark: Helpers
     
@@ -183,7 +199,6 @@ class CodableFeedStoreTests: XCTestCase {
         var insertionError: Error?
         sut.insert(items: cache.feed, timestamp: cache.timestamp) { receivedInsertionError in
             insertionError = receivedInsertionError
-            XCTAssertNil(receivedInsertionError, "Expected feed to be inserted successfully")
             exp.fulfill()
         }
         
@@ -202,7 +217,7 @@ class CodableFeedStoreTests: XCTestCase {
         sut.retrieve { retrievedResult in
             switch (expectedResult, retrievedResult) {
             case (.empty, .empty),
-                (.failure, .failure):
+                 (.failure, .failure):
                 break
                 
             case let (.found(expected), .found(retrieved)):
