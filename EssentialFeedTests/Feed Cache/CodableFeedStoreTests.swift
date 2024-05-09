@@ -60,7 +60,9 @@ protocol FailableInsertFeedStoreSpecs: FeedStoreSpecs {
 //protocol FailableDeleteFeedStoreSpecs: FeedStoreSpecs {
 //}
 
-class CodableFeedStoreTests: XCTestCase, FailableRetrieveFeedStoreSpecs, FailableInsertFeedStoreSpecs {
+typealias FailableFeedStore = FailableRetrieveFeedStoreSpecs & FailableInsertFeedStoreSpecs
+
+class CodableFeedStoreTests: XCTestCase, FailableFeedStore {
     
     override func setUp() {
         super.setUp()
