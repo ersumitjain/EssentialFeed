@@ -58,7 +58,7 @@ class CodableFeedStoreTests: XCTestCase, FailableFeedStore {
     
     func test_retrieve_deliversFoundValueOnNonEmptyCache() {
         let sut = makeSUT()
-
+        
         assertThatRetrieveDeliversFoundValuesOnNonEmptyCache(on: sut)
     }
     
@@ -79,19 +79,19 @@ class CodableFeedStoreTests: XCTestCase, FailableFeedStore {
         let storeURL = testSpecificStoreURL()
         let sut = makeSUT(storeURL: storeURL)
         
-       assertThatRetrieveHasNoSideEffectsOnFailure(on: sut, storeURL: storeURL)
+        assertThatRetrieveHasNoSideEffectsOnFailure(on: sut, storeURL: storeURL)
     }
     
     func test_insert_deliversNoErrorOnEmptyCache() {
-      let sut = makeSUT()
-      
-      assertThatInsertDeliversNoErrorOnEmptyCache(on: sut)
+        let sut = makeSUT()
+        
+        assertThatInsertDeliversNoErrorOnEmptyCache(on: sut)
     }
     
     func test_insert_overridesPreviouslyInsertedCacheValues() {
         let sut = makeSUT()
         
-    assertThatInsertOverridesPreviouslyInsertedCacheValues(on: sut)
+        assertThatInsertOverridesPreviouslyInsertedCacheValues(on: sut)
     }
     
     func test_insert_deliversErrorOnInsertionError() {
@@ -120,15 +120,15 @@ class CodableFeedStoreTests: XCTestCase, FailableFeedStore {
         assertThatDeleteEmptiesPreviouslyInsertedCache(on: sut)
     }
     
-//    func test_delete_deleiversErrorOnDeletionError() {
-//        let noDeletePermissionURL = cachesDirectory()
-//        let sut = makeSUT(storeURL: noDeletePermissionURL)
-//
-//        let deletionError = deleteCache(from: sut)
-//
-//        XCTAssertNil(deletionError, "Expected cache deletion to fail")
-//        expect(sut, toRetrieve: .empty)
-//    }
+    //    func test_delete_deleiversErrorOnDeletionError() {
+    //        let noDeletePermissionURL = cachesDirectory()
+    //        let sut = makeSUT(storeURL: noDeletePermissionURL)
+    //
+    //        let deletionError = deleteCache(from: sut)
+    //
+    //        XCTAssertNil(deletionError, "Expected cache deletion to fail")
+    //        expect(sut, toRetrieve: .empty)
+    //    }
     
     func test_storeSideEffects_runSerially() {
         let sut = makeSUT()
