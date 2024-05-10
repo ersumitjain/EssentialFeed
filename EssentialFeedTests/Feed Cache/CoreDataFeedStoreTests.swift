@@ -25,13 +25,13 @@ class CoreDataFeedStoreTests: XCTestCase, FailableFeedStore {
     func test_retrieve_deliversFoundValueOnNonEmptyCache() {
         let sut = makeSUT()
 
-     //   assertThatRetrieveDeliversFoundValuesOnNonEmptyCache(on: sut)
+        assertThatRetrieveDeliversFoundValuesOnNonEmptyCache(on: sut)
     }
     
     func test_retrieve_hasNoSideEffectsOnNonEmptyCache() {
         let sut = makeSUT()
 
-       // assertThatRetrieveHasNoSideEffectsOnNonEmptyCache(on: sut)
+        assertThatRetrieveHasNoSideEffectsOnNonEmptyCache(on: sut)
     }
     
     func test_retrieve_deliversFailureOnRetrievalError() {
@@ -49,15 +49,15 @@ class CoreDataFeedStoreTests: XCTestCase, FailableFeedStore {
     }
     
     func test_insert_deliversNoErrorOnEmptyCache() {
-//        let sut = makeSUT()
-//
-//        assertThatInsertDeliversNoErrorOnEmptyCache(on: sut)
+        let sut = makeSUT()
+
+        assertThatInsertDeliversNoErrorOnEmptyCache(on: sut)
     }
     
     func test_insert_overridesPreviouslyInsertedCacheValues() {
-//        let sut = makeSUT()
-//
-//        assertThatInsertOverridesPreviouslyInsertedCacheValues(on: sut)
+        let sut = makeSUT()
+
+        assertThatInsertOverridesPreviouslyInsertedCacheValues(on: sut)
     }
     
     func test_insert_deliversErrorOnInsertionError() {
@@ -82,12 +82,34 @@ class CoreDataFeedStoreTests: XCTestCase, FailableFeedStore {
     }
     
     func test_delete_emptiesPreviouslyInsertedCache() {
-//        let sut = makeSUT()
-//        assertThatDeleteEmptiesPreviouslyInsertedCache(on: sut)
+        let sut = makeSUT()
+        assertThatDeleteEmptiesPreviouslyInsertedCache(on: sut)
     }
     
     func test_storeSideEffects_runSerially() {
+        let sut = makeSUT()
+        var completedOperation = [XCTestExpectation]()
+        let opt1 = expectation(description: "Operation 1")
+        sut.insert(items: uniqueItems().local, timestamp: Date()) { _ in
+            completedOperation.append(opt1)
+            opt1.fulfill()
+        }
         
+        let opt2 = expectation(description: "Operation 2")
+        sut.deleteCacheFeed { _ in
+            completedOperation.append(opt2)
+            opt2.fulfill()
+        }
+        
+        let opt3 = expectation(description: "Operation 3")
+        sut.insert(items:uniqueItems().local, timestamp: Date()) { _ in
+            completedOperation.append(opt3)
+            opt3.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5.0)
+        
+        XCTAssertEqual(completedOperation, [opt1, opt2, opt3], "Expected side-effects to run serially but operations finished in the wrong order")
     }
     
     
