@@ -120,15 +120,15 @@ class CodableFeedStoreTests: XCTestCase, FailableFeedStore {
         assertThatDeleteEmptiesPreviouslyInsertedCache(on: sut)
     }
     
-    //    func test_delete_deleiversErrorOnDeletionError() {
-    //        let noDeletePermissionURL = cachesDirectory()
-    //        let sut = makeSUT(storeURL: noDeletePermissionURL)
-    //
-    //        let deletionError = deleteCache(from: sut)
-    //
-    //        XCTAssertNil(deletionError, "Expected cache deletion to fail")
-    //        expect(sut, toRetrieve: .empty)
-    //    }
+    func test_delete_deleiversErrorOnDeletionError() {
+        let noDeletePermissionURL = cachesDirectory()
+        let sut = makeSUT(storeURL: noDeletePermissionURL)
+        
+        let deletionError = deleteCache(from: sut)
+        
+        XCTAssertNil(deletionError, "Expected cache deletion to fail")
+        expect(sut, toRetrieve: .empty)
+    }
     
     func test_storeSideEffects_runSerially() {
         let sut = makeSUT()
@@ -163,6 +163,10 @@ class CodableFeedStoreTests: XCTestCase, FailableFeedStore {
         let sut = CodableFeedStore(storeURL: storeURL ?? testSpecificStoreURL())
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
+    }
+    
+    private func cachesDirectory() -> URL {
+        return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
     }
     
     private func setupEmptyStoreState() {
