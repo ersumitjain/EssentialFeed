@@ -12,11 +12,11 @@ import EssentialFeed
 extension FeedStoreSpecs where Self: XCTestCase {
     
     func assertThatRetrieveDeliversEmptyOnEmptyCache(on sut: FeedStore) {
-        expect(sut, toRetrieve: .empty)
+        expect(sut, toRetrieve: .success(.empty))
     }
     
     func assertThatRetrieveHasNoSideEffectsOnEmptyCache(on sut: FeedStore) {
-        expect(sut, toRetrieveTwice: .empty)
+        expect(sut, toRetrieveTwice: .success(.empty))
     }
     
     func assertThatRetrieveDeliversFoundValuesOnNonEmptyCache(on sut: FeedStore) {
@@ -25,7 +25,7 @@ extension FeedStoreSpecs where Self: XCTestCase {
         
         insert((feeds, timestamp), to: sut)
         
-        expect(sut, toRetrieve: .found(feed: feeds, timestamp: timestamp))
+        expect(sut, toRetrieve: .success(.found(feed: feeds, timestamp: timestamp)))
     }
     
     func assertThatRetrieveHasNoSideEffectsOnNonEmptyCache(on sut: FeedStore) {
@@ -34,7 +34,7 @@ extension FeedStoreSpecs where Self: XCTestCase {
                
                insert((feeds, timestamp), to: sut)
                
-               expect(sut, toRetrieveTwice: .found(feed: feeds, timestamp: timestamp))
+               expect(sut, toRetrieveTwice: .success(.found(feed: feeds, timestamp: timestamp)))
     }
     
     func assertThatRetrieveDeliversFailureOnRetrievalError(on sut: FeedStore, storeURL: URL) {
@@ -65,7 +65,7 @@ extension FeedStoreSpecs where Self: XCTestCase {
         
         XCTAssertNil(latestInsertionError, "Expected to override cache successfully")
         
-        expect(sut, toRetrieve: .found(feed: latestFeed, timestamp: latestTimestamp))
+        expect(sut, toRetrieve: .success(.found(feed: latestFeed, timestamp: latestTimestamp)))
     }
     
     func assertThatInsertDeliversErrorOnInsertionError(on sut: FeedStore) {
@@ -83,14 +83,14 @@ extension FeedStoreSpecs where Self: XCTestCase {
         
         insert((feed, timestamp), to: sut)
         
-        expect(sut, toRetrieve: .empty)
+        expect(sut, toRetrieve: .success(.empty))
     }
     
     func assertThatDeleteHasNoSideEffectsOnEmptyCache(on sut: FeedStore) {
            let deletionError = deleteCache(from: sut)
            
            XCTAssertNil(deletionError, "Expected empty cache deletion to succeed")
-           expect(sut, toRetrieve: .empty)
+           expect(sut, toRetrieve: .success(.empty))
        }
     
     func assertThatDeleteEmptiesPreviouslyInsertedCache(on sut: FeedStore) {
@@ -99,7 +99,7 @@ extension FeedStoreSpecs where Self: XCTestCase {
         let deletionError = deleteCache(from: sut)
         
         XCTAssertNil(deletionError, "Expected non-empty cache deletion to succeed")
-        expect(sut, toRetrieve: .empty)
+        expect(sut, toRetrieve: .success(.empty))
     }
     
 
@@ -134,21 +134,21 @@ extension FeedStoreSpecs where Self: XCTestCase {
         expect(sut, toRetrieve: expectedResult)
     }
     
-    func expect(_ sut: FeedStore, toRetrieve expectedResult: FeedStore.RetrievalResult) {
+    func expect(_ sut: FeedStore, toRetrieve expectedResult: FeedStore.RetrievalResult, file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "wait for cache retieval")
         
         sut.retrieve { retrievedResult in
             switch (expectedResult, retrievedResult) {
-            case (.empty, .empty),
+            case (.success(.empty), .success(.empty)),
                  (.failure, .failure):
                 break
                 
-            case let (.found(expected), .found(retrieved)):
-                XCTAssertEqual(expected.feed, retrieved.feed)
-                XCTAssertEqual(expected.timestamp, retrieved.timestamp)
+            case let (.success(.found(expected)), .success(.found(retrieved))):
+                XCTAssertEqual(expected.feed, retrieved.feed, file: file, line: line)
+                XCTAssertEqual(expected.timestamp, retrieved.timestamp, file: file, line: line)
                 
             default:
-                XCTFail("expected to retrieve \(expectedResult) result, got \(retrievedResult) instead")
+                XCTFail("expected to retrieve \(expectedResult) result, got \(retrievedResult) instead", file: file, line: line)
             }
             exp.fulfill()
         }
