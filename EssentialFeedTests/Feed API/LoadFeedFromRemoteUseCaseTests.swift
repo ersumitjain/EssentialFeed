@@ -220,7 +220,7 @@ class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         
         func complete(withStatuscode code: Int, data: Data = Data(), at index: Int = 0) {
             let response = HTTPURLResponse(url: requestedURLs[index], statusCode: code, httpVersion: nil, headerFields: nil)!
-            messages[index].completion(.success(data, response))
+            messages[index].completion(.success((data, response)))
         }
     }
 }
