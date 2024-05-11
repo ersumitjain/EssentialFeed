@@ -96,7 +96,7 @@ class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         //  var capturedResult = [RemoteFeedLoader.Result]()
         //   sut.load { capturedResult.append($0) }
         expect(sut, toCompleteWith: .success([])) {
-            let emptyListJson = Data(bytes: "{\"items\": []}".utf8)
+            let emptyListJson = Data("{\"items\": []}".utf8)
             client.complete(withStatuscode: 200, data: emptyListJson)
         }
     }
