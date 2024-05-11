@@ -19,6 +19,7 @@ public final class LocalFeedLoader {
 }
 
 extension LocalFeedLoader {
+    
     public func save(items: [FeedItem], completion: @escaping(Error?) -> Void) {
         store.deleteCacheFeed { [weak self] error in
             guard let self = self else { return }
