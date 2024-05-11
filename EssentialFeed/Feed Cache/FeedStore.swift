@@ -30,8 +30,11 @@ public enum CachedFeed {
 }
 
 public protocol FeedStore {
-    typealias DeletionCompletion = (Error?) -> Void
-    typealias InsertionCompletion = (Error?) -> Void
+    typealias DeletionResult = Error?
+    typealias DeletionCompletion = (DeletionResult) -> Void
+    
+    typealias InsertionResult = Error?
+    typealias InsertionCompletion = (InsertionResult) -> Void
     
     typealias RetrievalResult = Result<CachedFeed, Error>
     typealias RetrievalCompletion = (RetrievalResult) -> Void
